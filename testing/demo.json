@@ -1,0 +1,48 @@
+{
+    "year": 2024,
+    "month": 8,
+    "events": [
+      {
+        "date": "2024-08-01",
+        "title": "Meeting with Client",
+        "description": "Discuss project requirements",
+        "time": "10:00 AM"
+      },
+      {
+        "date": "2024-08-05",
+        "title": "Team Lunch",
+        "description": "Lunch with the team at local restaurant",
+        "time": "12:30 PM"
+      },
+      {
+        "date": "2024-08-10",
+        "title": "Project Deadline",
+        "description": "Submit the final version of the project",
+        "time": "5:00 PM"
+      },
+      {
+        "date": "2024-08-15",
+        "title": "Conference",
+        "description": "Attend the annual tech conference",
+        "time": "9:00 AM"
+      },
+      {
+        "date": "2024-08-20",
+        "title": "Doctor's Appointment",
+        "description": "Routine check-up with Dr. Smith",
+        "time": "3:00 PM"
+      },
+      {
+        "date": "2024-08-25",
+        "title": "Birthday Party",
+        "description": "Friend's birthday celebration",
+        "time": "7:00 PM"
+      },
+      {
+        "date": "2024-08-30",
+        "title": "Company Workshop",
+        "description": "Attend the full-day workshop on new software tools",
+        "time": "8:00 AM"
+      }
+    ]
+  }
