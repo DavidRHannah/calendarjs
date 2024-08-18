@@ -18,9 +18,8 @@ body {
     max-width: 600px;
     background-color: #BCDCBC;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px blanchedalmond;
     padding: 20px;
-    
 }
 
 .calendar-header-nav {
@@ -42,7 +41,7 @@ body {
 }
 
 .calendar-grid {
-    display:grid;
+    display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
 }
@@ -54,7 +53,7 @@ body {
     background-color: blanchedalmond;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;    
+    transition: background-color 0.3s;   
 }
 
 .date:hover{

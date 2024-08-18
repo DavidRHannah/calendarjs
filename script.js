@@ -3,8 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const monthYearDisplay = document.querySelector('.month-year');
     const prevMonthBtn = document.querySelector('.prev-month');
     const nextMonthBtn = document.querySelector('.next-month');
-
+    
     let currentDate = new Date();
+    let events = {};
 
     function renderCalendar() {
         const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -39,14 +40,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <hr />
                     <div class="modal-body">
-                        <p>Content goes here...</p>
+                        <div class="event-list">
+                            ${events[day] ? events[day].map(event=>`<p>${event}</p>`).join('') : 'No events'}
+                        </div>
+                        <input type="text" class="event-input" placeholder="Add event" />
+                        <button class="add-event-btn">Add Event</button>
                     </div>
                 </div>
             `;
 
-            dateBtn.addEventListener('click', ()=>{
-                if (day != '') {
+            dateBtn.addEventListener('click', () => {
+                if (day !== '') {
                     modal.style.display = "block";
+                    const addEventBtn = modal.querySelector('.add-event-btn');
+                    addEventBtn.addEventListener('click', () => {
+                        const eventInput = modal.querySelector('.event-input');
+                        const newEvent = eventInput.value;
+                        if (newEvent) {
+                            if (!events[day]) {
+                                events[day] = [];
+                            }
+                            events[day].push(newEvent);
+                            eventInput.value = '';
+                            modal.querySelector('.events-list').innerHTML = events[day].map(event => `<p>${event}</p>`).join('');
+                        }
+                    });
                 }
             });
 
