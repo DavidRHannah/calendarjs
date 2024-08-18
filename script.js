@@ -19,17 +19,50 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 1; i <= lastDateOfMonth; i++) {
             daysInCalendar.push(i);
         }
-        while (daysInCalendar.length < 35) { 
-            daysInCalendar.push('');
-        }
+
+        const totalRows = Math.ceil(daysInCalendar.length / 7);
+        calendarGrid.style.gridTemplateRows = `repeat(${totalRows}, 1fr)`;
 
         calendarGrid.innerHTML = ''; 
-        for (let day of daysInCalendar) {
-            const dateDiv = document.createElement('div');
-            dateDiv.className = 'date';
-            dateDiv.innerText = day;
-            calendarGrid.appendChild(dateDiv);
-        }
+        daysInCalendar.forEach(day=>{
+            const dateBtn = document.createElement('button');
+            dateBtn.className = 'date';
+            dateBtn.innerText = day;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-header-title">Day ${day}</div>
+                        <div class="close">&times;</div>
+                    </div>
+                    <hr />
+                    <div class="modal-body">
+                        <p>Content goes here...</p>
+                    </div>
+                </div>
+            `;
+
+            dateBtn.addEventListener('click', ()=>{
+                if (day != '') {
+                    modal.style.display = "block";
+                }
+            });
+
+            modal.querySelector('.close').addEventListener('click', ()=>{
+                modal.style.display = "none";
+            });
+
+            window.addEventListener('click', (event)=>{
+                if(event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+            
+            calendarGrid.appendChild(dateBtn);
+            calendarGrid.appendChild(modal);
+        });
 
         const options = { month: 'long', year: 'numeric' };
         monthYearDisplay.innerText = currentDate.toLocaleDateString('en-US', options);
