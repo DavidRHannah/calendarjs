@@ -3,16 +3,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const monthYearDisplay = document.querySelector('.month-year');
     const prevMonthBtn = document.querySelector('.prev-month');
     const nextMonthBtn = document.querySelector('.next-month');
-    
+
     let currentDate = new Date();
-    let events = {};
+    let events = {}; 
+
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const firstDayIndex = firstDayOfMonth.getDay();
+    const lastDateOfMonth = lastDayOfMonth.getDate();
 
     function renderCalendar() {
-        const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-        const firstDayIndex = firstDayOfMonth.getDay();
-        const lastDateOfMonth = lastDayOfMonth.getDate();
-
         const daysInCalendar = [];
         for (let i = 0; i < firstDayIndex; i++) {
             daysInCalendar.push('');
@@ -20,16 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 1; i <= lastDateOfMonth; i++) {
             daysInCalendar.push(i);
         }
-
         const totalRows = Math.ceil(daysInCalendar.length / 7);
         calendarGrid.style.gridTemplateRows = `repeat(${totalRows}, 1fr)`;
 
-        calendarGrid.innerHTML = ''; 
-        daysInCalendar.forEach(day=>{
+        calendarGrid.innerHTML = '';
+        daysInCalendar.forEach(day => {
             const dateBtn = document.createElement('button');
             dateBtn.className = 'date';
             dateBtn.innerText = day;
-            
+
             const modal = document.createElement('div');
             modal.className = 'modal';
             modal.innerHTML = `
@@ -40,61 +39,74 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <hr />
                     <div class="modal-body">
-                        <div class="event-list">
-                            ${events[day] ? events[day].map(event=>`<p>${event}</p>`).join('') : 'No events'}
+                        <div class="events-list">
+                            ${events[currentDate.toDateString()] && events[currentDate.toDateString()][day] ? 
+                                events[currentDate.toDateString()][day].map(event => `<p>${event}</p>`).join('') : 'No events'}
                         </div>
                         <input type="text" class="event-input" placeholder="Add event" />
                         <button class="add-event-btn">Add Event</button>
                     </div>
                 </div>
             `;
-
+            
             dateBtn.addEventListener('click', () => {
-                if (day !== '') {
-                    modal.style.display = "block";
-                    const addEventBtn = modal.querySelector('.add-event-btn');
-                    addEventBtn.addEventListener('click', () => {
-                        const eventInput = modal.querySelector('.event-input');
-                        const newEvent = eventInput.value;
-                        if (newEvent) {
-                            if (!events[day]) {
-                                events[day] = [];
-                            }
-                            events[day].push(newEvent);
-                            eventInput.value = '';
-                            modal.querySelector('.events-list').innerHTML = events[day].map(event => `<p>${event}</p>`).join('');
-                        }
-                    });
+                if (day === '') {
+                    return;
                 }
+                modal.style.display = "block";
+                const addEventBtn = modal.querySelector('.add-event-btn');
+                const eventListDiv = modal.querySelector('.events-list');
+                addEventBtn.addEventListener('click', () => {
+                    const eventInput = modal.querySelector('.event-input');
+                    const newEvent = eventInput.value.trim(); 
+                    const key = currentDate.toDateString();
+
+                    if (newEvent) {
+                        if (!events[key]) {
+                            events[key] = {};
+                        }
+                        if (!events[key][day]) {
+                            events[key][day] = [];
+                        }
+                        events[key][day].push(newEvent);
+                        eventInput.value = ''; 
+                        eventListDiv.innerHTML = events[key][day].map(event => `<p>${event}</p>`).join('');
+                    }
+                });
             });
 
-            modal.querySelector('.close').addEventListener('click', ()=>{
+            const modalCloseBtn = modal.querySelector('.close');
+            modalCloseBtn.addEventListener('click', () => {
                 modal.style.display = "none";
             });
 
-            window.addEventListener('click', (event)=>{
-                if(event.target === modal) {
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
                     modal.style.display = "none";
                 }
             });
-            
+
             calendarGrid.appendChild(dateBtn);
             calendarGrid.appendChild(modal);
         });
 
-        const options = { month: 'long', year: 'numeric' };
+        const options = {
+            month: 'long',
+            year: 'numeric'
+        };
         monthYearDisplay.innerText = currentDate.toLocaleDateString('en-US', options);
     }
 
+    const currentMonth = currentDate.getMonth();
     prevMonthBtn.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() - 1);
+        currentDate.setMonth(currentMonth - 1);
         renderCalendar();
     });
 
     nextMonthBtn.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() + 1);
+        currentDate.setMonth(currentMonth + 1);
         renderCalendar();
     });
 
-    renderCalendar(); 
+    renderCalendar();
 });
